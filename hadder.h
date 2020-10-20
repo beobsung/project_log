@@ -73,50 +73,8 @@ public:
 			"[" + std::to_string(year) + "년" + std::to_string(month) + "월" + std::to_string(day) + "일" + std::to_string(hour) +
 			"시" + std::to_string(minute) + "분" + std::to_string(second) + "초" + "]" + " <<"+ message;
 	}
-
-	void Command() {
-		std::cout << log_info << std::endl;
-		check_filesize(text_name);
-
-	}
-
-	int GetSize(std::string s) {
-
-		int size = 0;
-		FILE* fp = fopen(s.c_str(), "r");
-		if (fp == nullptr) {
-			return 0;
-		}
-
-		fseek(fp, 0, SEEK_END);    // 파일 포인터를 파일의 끝으로 이동시킴
-		size = ftell(fp);          // 파일 포인터의 현재 위치를 얻음
-
-		fclose(fp);
-		return size;
-	}
-
-
-
-	void Write(std::string filePath) {   //입력
-		FILE* fp = fopen(filePath.c_str(), "a");
-		if (fp == nullptr) {
-			fprintf(stderr, "File Open Error\n");
-		};
-		fprintf(fp, "%s\n", log_info.c_str());
-		fflush(fp);
-
-
-	}
-	void check_filesize(std::string text) {  //파일용량 관리
-		int rev = 0;
-		while (1) {
-			std::string make_text = std::to_string(rev) + "." + text_name;
-			std::string where_save = wherefile + make_text;
-			if (GetSize(where_save) < 300) {
-				Write(where_save);
-				break;
-			}
-			rev += 1;
-		}
-	}
+	void Command();
+	int GetSize(std::string s);
+	void Write(std::string filePath);
+	void check_filesize(std::string text);
 };

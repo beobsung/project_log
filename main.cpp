@@ -28,13 +28,12 @@ void Factory(int which_log, std::string message, const char* filename, const cha
 }
 
 int main() {
-	LOG(INFO, "여기 인포");
-	//while (1) {
-	//	getchar();
-	//	LOG(INFO, "여기 인포");
-	//	getchar();
-	//	LOG(DEBUG, "여기 디버그");
-	//	getchar();
-	//	LOG(ERROR, "여기 에러");
-	//}
+	while (1) {
+		getchar();
+		LOG(INFO, "기록남기기");
+		getchar();
+		LOG(DEBUG, "여기 디버그");
+		getchar();
+		LOG(ERROR, "여기 에러");
+	}
 }
