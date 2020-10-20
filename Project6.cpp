@@ -5,20 +5,35 @@
 #include <fstream>
 #include <iostream>
 #include <time.h>
-time_t t = time(NULL);
-struct tm tm = *localtime(&t);
 
-#define LOG_INFO     Factory("INFO",__FILE__,__FUNCTION__,__LINE__);  
-#define LOG_DEBUG    Factory("DEBUG",__FILE__,__FUNCTION__,__LINE__);
-#define LOG_WARNING  Factory("WARNING",__FILE__,__FUNCTION__,__LINE__);
-#define LOG_ERROR    Factory("ERROR",__FILE__,__FUNCTION__,__LINE__);
+//모듈 또는 소스 파일의 어떤 함수, 어떤 위치에서 발생한 정보인지 알수 있어야 한다.
+// OK
+//로깅 정보가 다양한 목적지로 저장 / 전송 될 수 있어야 한다.
+//로깅의 출력 레벨을 조정할 수 있어야 한다.
+
+//로깅의 정확한 날짜와 시간을 기록할 수 있어야 한다.
+//OK
+//로깅을 날짜별 시간별로 다른 파일로 기록할 것.
+//OK??
+//로그 파일이 지정된 크기를 넘어설 경우, 자동으로 다른 파일에 기록할 수 있어야 한다.
+
+
+enum level {
+	INFO,
+	DEBUG,
+	ERROR
+};
+#define LOG(WHAT)  Factory(WHAT,__FILE__,__FUNCTION__,__LINE__);  
+
 
 int GetSize(std::string s) {
+
 	int size = 0;
 	FILE* fp = fopen(s.c_str(), "r");
 	if (fp == nullptr) {
 		return 0;
 	}
+
 	fseek(fp, 0, SEEK_END);    // 파일 포인터를 파일의 끝으로 이동시킴
 	size = ftell(fp);          // 파일 포인터의 현재 위치를 얻음
 
@@ -33,6 +48,8 @@ class Log {
 	std::string information;
 	std::string file_name;
 	std::string func_name;
+	std::string text_name;
+	std::string time_info;
 	int line_num;
 	int year;
 	int month;
@@ -43,6 +60,8 @@ class Log {
 
 public:
 	Log(std::string info, std::string fn, std::string fcn, int lnum) {
+		time_t t = time(NULL);
+		struct tm tm = *localtime(&t);
 		information = info;
 		year = tm.tm_year + 1900;
 		month = tm.tm_mon + 1;
@@ -54,7 +73,10 @@ public:
 		func_name = fcn;
 		line_num = lnum;
 
-		filePath = information + "_" + "[" + std::to_string(year) +"년" + std::to_string(month) + 
+		time_info = std::to_string(year) + "년" + std::to_string(month) + "월"
+			       + std::to_string(day) + "일" + "]" + ".txt";
+
+		text_name = information + "_" + "[" + std::to_string(year) + "년" + std::to_string(month) +
 			"월" + std::to_string(day) + "일" + "]" + ".txt";
 
 		log_info = "[" + information + "] " + file_name + " " + func_name + " " + std::to_string(line_num) + " " +
@@ -64,35 +86,59 @@ public:
 
 	void Command() {
 
-		Write(filePath);
+		Write(text_name);
 
 	}
 
 	void Write(std::string filePath) {
-		std::ofstream writeFile(filePath.data(), std::ios::app);
-		if (writeFile.is_open()) {
-			writeFile << log_info << "\n";
-		}
-
+		FILE* fp = fopen(filePath.c_str(), "a");
+		if (fp == nullptr) {
+			fprintf(stderr, "File Open Error\n");
+		}; 
 		std::cout << log_info << std::endl;
+	    fprintf(fp, log_info.c_str());
+
+		//int size = GetSize(filePath);
+
+		//std::cout << "file size" << size << std::endl;
+		//std::ofstream writeFile(filePath.data(), std::ios::app);
+		//if (writeFile.is_open()) {
+		//	writeFile << log_info << "\n";
+		//}
+		//writeFile.close();
+
+
+		//std::cout << log_info << std::endl;
 	}
 
 };
 
-void Factory(const char* which_log, const char* filename, const char* funcname, const int& linenum) {
-	Log* m = new Log(which_log, filename, funcname, linenum);
+void Factory(int which_log, const char* filename, const char* funcname, const int& linenum) {
+	std::string s;
+
+	if (which_log == 0) {
+		s = "INFO";
+	}
+	else if (which_log == 1) {
+		s = "DEBUG";
+	}
+	else if (which_log == 2) {
+		s = "ERROR";
+	}
+
+	Log* m = new Log(s, filename, funcname, linenum);
 	m->Command();
 }
 
 
 int main() {
-	int n;
-	std::cout << "반복수 : ";
-	std::cin >> n;
-	while (n--) {
-		LOG_INFO;
-		LOG_DEBUG;
-		LOG_WARNING;
-		LOG_ERROR;
+
+	while (1) {
+		getchar();
+		LOG(INFO);
+		getchar();
+		LOG(DEBUG);
+		getchar();
+		LOG(ERROR);
 	}
 }
