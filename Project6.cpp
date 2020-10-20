@@ -9,6 +9,7 @@
 //모듈 또는 소스 파일의 어떤 함수, 어떤 위치에서 발생한 정보인지 알수 있어야 한다.
 // OK
 //로깅 정보가 다양한 목적지로 저장 / 전송 될 수 있어야 한다.
+
 //로깅의 출력 레벨을 조정할 수 있어야 한다.
 
 //로깅의 정확한 날짜와 시간을 기록할 수 있어야 한다.
@@ -16,14 +17,14 @@
 //로깅을 날짜별 시간별로 다른 파일로 기록할 것.
 //OK??
 //로그 파일이 지정된 크기를 넘어설 경우, 자동으로 다른 파일에 기록할 수 있어야 한다.
-
+//OK
 
 enum level {
 	INFO,
 	DEBUG,
 	ERROR
 };
-#define LOG(WHAT)  Factory(WHAT,__FILE__,__FUNCTION__,__LINE__);  
+#define LOG(WHAT,MESSAGE)  Factory(WHAT, MESSAGE ,__FILE__,__FUNCTION__,__LINE__);  
 
 
 int GetSize(std::string s) {
@@ -49,7 +50,8 @@ class Log {
 	std::string file_name;
 	std::string func_name;
 	std::string text_name;
-	std::string time_info;
+	std::string message;
+	std::string wherefile;
 	int line_num;
 	int year;
 	int month;
@@ -59,7 +61,7 @@ class Log {
 	int second;
 
 public:
-	Log(std::string info, std::string fn, std::string fcn, int lnum) {
+	Log(std::string info, std::string messa,std::string new_filePath, std::string fn, std::string fcn, int lnum) {
 		time_t t = time(NULL);
 		struct tm tm = *localtime(&t);
 		information = info;
@@ -72,48 +74,60 @@ public:
 		file_name = fn;
 		func_name = fcn;
 		line_num = lnum;
-
-		time_info = std::to_string(year) + "년" + std::to_string(month) + "월"
-			       + std::to_string(day) + "일" + "]" + ".txt";
+		message = messa;
+		wherefile = new_filePath;
 
 		text_name = information + "_" + "[" + std::to_string(year) + "년" + std::to_string(month) +
 			"월" + std::to_string(day) + "일" + "]" + ".txt";
 
 		log_info = "[" + information + "] " + file_name + " " + func_name + " " + std::to_string(line_num) + " " +
 			"[" + std::to_string(year) + "년" + std::to_string(month) + "월" + std::to_string(day) + "일" + std::to_string(hour) +
-			"시" + std::to_string(minute) + "분" + std::to_string(second) + "초" + "]";
+			"시" + std::to_string(minute) + "분" + std::to_string(second) + "초" + "]" + " <<"+ message;
 	}
 
 	void Command() {
-
-		Write(text_name);
+		std::cout << log_info << std::endl;
+		check_filesize(text_name);
 
 	}
 
-	void Write(std::string filePath) {
+	void Write(std::string filePath) {   //입력
 		FILE* fp = fopen(filePath.c_str(), "a");
 		if (fp == nullptr) {
 			fprintf(stderr, "File Open Error\n");
-		}; 
-		std::cout << log_info << std::endl;
-	    fprintf(fp, log_info.c_str());
-
-		//int size = GetSize(filePath);
-
-		//std::cout << "file size" << size << std::endl;
-		//std::ofstream writeFile(filePath.data(), std::ios::app);
-		//if (writeFile.is_open()) {
-		//	writeFile << log_info << "\n";
-		//}
-		//writeFile.close();
+		};
+		fprintf(fp, "%s\n", log_info.c_str());
+		fflush(fp);
 
 
-		//std::cout << log_info << std::endl;
+
+
+
+		//std::cout << filePath << std::endl;
+		//FILE* fp = fopen(filePath.c_str(), "a");
+		//if (fp == nullptr) {
+		//	fprintf(stderr, "File Open Error\n");
+		//}; 
+		//fprintf(fp, "%s\n",log_info.c_str());
+		//fflush(fp);
+
+	}
+	void check_filesize(std::string text) {  //파일용량 관리
+		int rev = 0;
+		while (1) {
+			std::string make_text = std::to_string(rev) + "." + text_name;
+			//std::string where_save = wherefile + text_name;
+			if (GetSize(make_text) < 300) {
+				Write(make_text);
+				break;
+			}
+			rev += 1;
+		}
 	}
 
 };
 
-void Factory(int which_log, const char* filename, const char* funcname, const int& linenum) {
+void Factory(int which_log, std::string message ,const char* filename, const char* funcname, const int& linenum) {
 	std::string s;
 
 	if (which_log == 0) {
@@ -126,7 +140,9 @@ void Factory(int which_log, const char* filename, const char* funcname, const in
 		s = "ERROR";
 	}
 
-	Log* m = new Log(s, filename, funcname, linenum);
+	std::string wherefile ="C:\\Users\\M\\Desktop\\pro\\";    //파일 위치 변경
+
+	Log* m = new Log(s, message, wherefile, filename, funcname, linenum);
 	m->Command();
 }
 
@@ -135,10 +151,10 @@ int main() {
 
 	while (1) {
 		getchar();
-		LOG(INFO);
+		LOG(INFO,"여기 인포");
 		getchar();
-		LOG(DEBUG);
+		LOG(DEBUG,"여기 디버그");
 		getchar();
-		LOG(ERROR);
+		LOG(ERROR,"여기 에러");
 	}
 }
