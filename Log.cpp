@@ -4,7 +4,7 @@
 #include "Log_header.h"
 #include "LogConfiguration_header.h"
 
-void Log::Command(std::string timestamp) {
+void Log::Command(const std::string& timestamp) {
 	std::string where_file = LogConfiguration::getInstance().GetPath();
 	std::string text_name = information + "_" + "[" + timestamp + "]" + ".txt";
 
@@ -12,7 +12,7 @@ void Log::Command(std::string timestamp) {
 
 	check_filesize(where_file, text_name, max_size);
 }
-int Log::GetSize(std::string s) {
+int Log::GetSize(const std::string& s) {
 
 	int size = 0;
 	FILE* fp = fopen(s.c_str(), "r");
@@ -25,7 +25,7 @@ int Log::GetSize(std::string s) {
 	fclose(fp);
 	return size;
 }
-void  Log::Write(std::string filePath) {
+void  Log::Write(const std::string& filePath) {
 	std::cout << filePath << std::endl;
 	FILE* fp = fopen(filePath.c_str(), "a");
 	if (fp == nullptr) {
@@ -36,7 +36,7 @@ void  Log::Write(std::string filePath) {
 	fflush(fp);
 
 }
-void  Log::check_filesize(std::string where, std::string text, int max_size) {
+void  Log::check_filesize(const std::string& where, const std::string& text, const int& max_size) {
 	int rev = 0;
 	while (1) {
 		std::string make_text = std::to_string(rev) + "." + text;

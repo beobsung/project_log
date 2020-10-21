@@ -66,8 +66,8 @@ public:
 	}
 
 
-	void Command(std::string timestamp);
-	int GetSize(std::string s);
-	void Write(std::string filePath);
-	void check_filesize(std::string where, std::string text, int max_size);
+	void Command(const std::string& timestamp);
+	int GetSize(const std::string& s);
+	void Write(const std::string& filePath);
+	void check_filesize(const std::string& where, const std::string& text, const int& max_size);
 };
