@@ -7,11 +7,11 @@
 Log::Log(IState* which, std::string messa, std::string fn, std::string fcn, int lnum) {
 	information = which->getLevelString();
 	message = messa;
-	file_name = fn;
-	func_name = fcn;
-	line_num = lnum;
+	filename = fn;
+	funcname = fcn;
+	linenum = lnum;
 	std::string timestamp = TimeStamp::current();
-	log_info = "[" + information + "] " + file_name + " " + func_name + " " + std::to_string(line_num)
+	loginfo = "[" + information + "] " + filename + " " + funcname + " " + std::to_string(linenum)
 		+ " " + "[" + timestamp + "]" + " <<" + message;
 	Command(timestamp);
 }
@@ -39,8 +39,8 @@ void  Log::Write(const std::string& filePath) {
 	if (fp == nullptr) {
 		fprintf(stderr, "File Open Error\n");
 	};
-	std::cout << log_info << std::endl;
-	fprintf(fp, "%s\n", log_info.c_str());
+	std::cout << loginfo << std::endl;
+	fprintf(fp, "%s\n", loginfo.c_str());
 	fflush(fp);
 
 }

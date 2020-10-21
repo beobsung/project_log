@@ -12,7 +12,7 @@ int main() {
 
 	while (1) {
 		getchar();
-		LOG_INFO("INFO는 - %d %c\n", n, c);
+		LOG_INFO("INFO");
 		getchar();
 		LOG_DEBUG("디버그는 - %d %c\n", n, c);
 		getchar();

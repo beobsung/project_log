@@ -32,12 +32,12 @@ public:
 
 class Log {
 public:
-	std::string log_info;
+	std::string loginfo;
 	std::string information;
-	std::string file_name;
-	std::string func_name;
+	std::string filename;
+	std::string funcname;
 	std::string message;
-	int line_num;
+	int linenum;
 	int year;
 	int month;
 	int day;
