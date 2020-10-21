@@ -1,20 +1,20 @@
-﻿#include "LogConfiguration_header.h"
-#include "Log_header.h"
+﻿#include "LogConfiguration.h"
+#include "Log.h"
 
 int main() {
-	//정책
 	LogConfiguration& config = LogConfiguration::getInstance();
 	config.SetPath("");
 	config.SetMaxSize(1000);
 
+	int n = 10;
+	char c = 'A';
 
 	while (1) {
 		getchar();
-		LOG_INFO("기록남기기");
+		LOG_INFO("INFO는 - %d %c\n", n, c);
 		getchar();
-		LOG_DEBUG("여기 디버그");
+		LOG_DEBUG("디버그는 - %d %c\n", n, c);
 		getchar();
-		LOG_ERROR("여기 에러");
+		LOG_ERROR("에러는는 - %d %c\n", n, c);
 	}
-
 }

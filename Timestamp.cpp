@@ -2,7 +2,7 @@
 #include <time.h>
 #include <iostream>
 #include <string>
-#include "Timestamp_header.h"
+#include "Timestamp.h"
 
 std::string TimeStamp::current() {
 	time_t t = time(NULL);

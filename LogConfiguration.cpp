@@ -1,4 +1,4 @@
-#include "LogConfiguration_header.h"
+#include "LogConfiguration.h"
 
 LogConfiguration& LogConfiguration::getInstance() {
 	static LogConfiguration instance;
