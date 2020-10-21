@@ -13,12 +13,13 @@
 //로깅을 날짜별 시간별로 다른 파일로 기록할 것.
 //로그 파일이 지정된 크기를 넘어설 경우, 자동으로 다른 파일에 기록할 수 있어야 한다.
 
-//-----------------------------------------------------------
-#define LOG(WHAT,MESSAGE) InfoState is; DebugState ds; ErrorState es; new Log(WHAT,MESSAGE, __FILE__, __FUNCTION__, __LINE__);
+
+#define LOG(WHAT,MESSAGE)  new Log(WHAT,MESSAGE, __FILE__, __FUNCTION__, __LINE__);
 #define INFO &is
 #define DEBUG &ds
 #define ERROR &es
 
+//////////////////////////////////////////////////////////////////////
 
 class LogConfiguration {
 	std::string path;
@@ -51,7 +52,7 @@ std::string  LogConfiguration::GetPath() const {
 int LogConfiguration::GetMaxSize() const {
 	return maxSize;
 }
-//----------------------------------------------------------
+//////////////////////////////////////////////////////////////////////
 class TimeStamp {
 public:
 	static std::string current();
@@ -73,7 +74,7 @@ std::string TimeStamp::current() {
 	);
 	return buf;
 }
-//----------------------------------------------------------
+//////////////////////////////////////////////////////////////////////
 
 struct IState {
 	virtual ~IState() {}
@@ -99,7 +100,7 @@ public:
 		return "ERROR";
 	}
 };
-
+//////////////////////////////////////////////////////////////////////
 class Log {
 public:
 	std::string log_info;
@@ -186,7 +187,11 @@ void  Log::check_filesize(std::string where, std::string text, int max_size) {
 		rev += 1;
 	}
 }
-//----------------------------------------------------------
+//////////////////////////////////////////////////////////////////////
+
+InfoState is;
+DebugState ds;
+ErrorState es;
 
 int main() {
 
