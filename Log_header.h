@@ -46,7 +46,7 @@ public:
 	int minute;
 	int second;
 
-	Log(IState* which, std::string messa, std::string fn, std::string fcn, int lnum) {
+	Log(IState* which, std::string messa, std::string fn, std::string fcn, int lnum) {   //»ý¼ºÀÚ
 
 		information = which->getLevelString();
 		message = messa;
@@ -61,9 +61,31 @@ public:
 		Command(timestamp);
 	}
 
-
 	void Command(const std::string& timestamp);
 	int GetSize(const std::string& s);
 	void Write(const std::string& filePath);
 	void check_filesize(const std::string& where, const std::string& text, const int& max_size);
 };
+
+//#include <string>
+//#include <iostream>
+//using namespace std;
+//
+//std::string foo(const char* fmt, ...) {
+//	char buf[512];
+//	va_list ptr;
+//	va_start(ptr, fmt);
+//
+//	vsprintf(buf, fmt, ptr);
+//	return buf;
+//}
+//
+//#define FOO(fmt, ...) foo(fmt, __VA_ARGS__)
+//
+//int main() {
+//	int n = 10;
+//	char c = 'A';
+//
+//	std::string s = FOO("hello - %d %c\n", n, c);
+//	cout << s << endl;
+//}
