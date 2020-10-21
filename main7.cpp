@@ -13,15 +13,13 @@
 //로깅을 날짜별 시간별로 다른 파일로 기록할 것.
 //로그 파일이 지정된 크기를 넘어설 경우, 자동으로 다른 파일에 기록할 수 있어야 한다.
 
-//헤더시작---------------------------------------------------------------
-#define LOG(WHAT,MESSAGE) new Log(WHAT,MESSAGE, __FILE__, __FUNCTION__, __LINE__);
+//-----------------------------------------------------------
+#define LOG(WHAT,MESSAGE) InfoState is; DebugState ds; ErrorState es; new Log(WHAT,MESSAGE, __FILE__, __FUNCTION__, __LINE__);
+#define INFO &is
+#define DEBUG &ds
+#define ERROR &es
 
-enum level {
-	INFO,
-	DEBUG,
-	ERROR
-};
-//----------------------------------------------------------
+
 class LogConfiguration {
 	std::string path;
 	int maxSize;
@@ -35,13 +33,9 @@ public:
 	}
 
 	LogConfiguration() : path(""), maxSize(300) {}
-
 	void SetMaxSize(int size);
-
 	void SetPath(const std::string& p);
-
 	std::string GetPath() const;
-
 	int GetMaxSize() const;
 };
 //----------------------------------------------------------
@@ -81,6 +75,31 @@ std::string TimeStamp::current() {
 }
 //----------------------------------------------------------
 
+struct IState {
+	virtual ~IState() {}
+	virtual std::string getLevelString() const = 0;
+
+};
+class InfoState : public IState {
+public:
+	std::string getLevelString() const override {
+		return "INFO";
+	}
+};
+class DebugState : public IState {
+public:
+	std::string getLevelString() const override {
+		return "DEBUG";
+	}
+};
+
+class ErrorState : public IState {
+public:
+	std::string getLevelString() const override {
+		return "ERROR";
+	}
+};
+
 class Log {
 public:
 	std::string log_info;
@@ -96,18 +115,11 @@ public:
 	int minute;
 	int second;
 
-	Log(int which_log, std::string messa, std::string fn, std::string fcn, int lnum) {
+	Log(IState* which, std::string messa, std::string fn, std::string fcn, int lnum) {
 
 		std::string s;
-		if (which_log == 0) {
-			s = "INFO";
-		}
-		else if (which_log == 1) {
-			s = "DEBUG";
-		}
-		else if (which_log == 2) {
-			s = "ERROR";
-		}
+		s = which->getLevelString();
+
 
 		information = s;
 		message = messa;
@@ -118,7 +130,7 @@ public:
 		std::string timestamp = TimeStamp::current();
 
 		log_info = "[" + information + "] " + file_name + " " + func_name + " " + std::to_string(line_num)
-			+ " " + "[" + timestamp + "]" + " <<" + message;
+			+ " " + "[" + timestamp + "]" + " <<" + message;   //기록내용
 		Command(timestamp);
 	}
 
@@ -175,18 +187,20 @@ void  Log::check_filesize(std::string where, std::string text, int max_size) {
 	}
 }
 //----------------------------------------------------------
+
 int main() {
 
 	LogConfiguration& config = LogConfiguration::getInstance();
 	config.SetPath("");
 	config.SetMaxSize(1000);
-
-	while (1) {
-		getchar();
-		LOG(INFO, "기록남기기");
-		getchar();
-		LOG(DEBUG, "여기 디버그");
-		getchar();
-		LOG(ERROR, "여기 에러");
-	}
+	LOG(DEBUG, "여기 디버그");
+	LOG(ERROR, "여기 에러");
+	//while (1) {
+	//	getchar();
+	//	LOG(INFO, "기록남기기");
+	//	getchar();
+	//	LOG(DEBUG, "여기 디버그");
+	//	getchar();
+	//	LOG(ERROR, "여기 에러");
+	//}
 }
