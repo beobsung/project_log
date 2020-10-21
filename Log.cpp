@@ -26,7 +26,6 @@ int Log::GetSize(const std::string& s) {
 	return size;
 }
 void  Log::Write(const std::string& filePath) {
-	std::cout << filePath << std::endl;
 	FILE* fp = fopen(filePath.c_str(), "a");
 	if (fp == nullptr) {
 		fprintf(stderr, "File Open Error\n");

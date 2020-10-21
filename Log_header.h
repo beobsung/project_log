@@ -48,11 +48,7 @@ public:
 
 	Log(IState* which, std::string messa, std::string fn, std::string fcn, int lnum) {
 
-		std::string s;
-		s = which->getLevelString();
-
-
-		information = s;
+		information = which->getLevelString();
 		message = messa;
 		file_name = fn;
 		func_name = fcn;
@@ -61,7 +57,7 @@ public:
 		std::string timestamp = TimeStamp::current();
 
 		log_info = "[" + information + "] " + file_name + " " + func_name + " " + std::to_string(line_num)
-			+ " " + "[" + timestamp + "]" + " <<" + message;   //기록내용
+			         + " " + "[" + timestamp + "]" + " <<" + message;   //기록내용
 		Command(timestamp);
 	}
 

@@ -2,10 +2,12 @@
 #include "Log_header.h"
 
 int main() {
-
+	//정책
 	LogConfiguration& config = LogConfiguration::getInstance();
 	config.SetPath("");
 	config.SetMaxSize(1000);
+
+
 	while (1) {
 		getchar();
 		LOG_INFO("기록남기기");
