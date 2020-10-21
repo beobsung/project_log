@@ -1,13 +1,14 @@
 ﻿#include "LogConfiguration.h"
 #include "Log.h"
+#include "define.h"
 
 int main() {
 	LogConfiguration& config = LogConfiguration::getInstance();
 	config.SetPath("");
 	config.SetMaxSize(1000);
 
-	int n = 10;
-	char c = 'A';
+	int n = 99;
+	char c = 'ABC';
 
 	while (1) {
 		getchar();
