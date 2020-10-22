@@ -10,7 +10,7 @@ int main() {
 	int n = 99;
 
 	LOG_INFO("INFO : 확인 필요");
-	//LOG_DEBUG("디버그는 %d번줄에서 수행", n);
-	//LOG_ERROR("여기에서 에러");
+	LOG_ERROR("여기에서 에러");
+	LOG_DEBUG("디버그는 %d번줄에서 수행", n);
 
 }
