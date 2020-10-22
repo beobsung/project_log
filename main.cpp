@@ -4,18 +4,13 @@
 
 int main() {
 	LogConfiguration& config = LogConfiguration::getInstance();
-	config.SetPath("");
-	config.SetMaxSize(1000);
+	config.SetPath("");  //파일 저장경로 세팅
+	config.SetMaxSize(1000); //파일 저장 최대 사이즈 세팅
 
 	int n = 99;
-	char c = 'ABC';
 
-	while (1) {
-		getchar();
-		LOG_INFO("INFO");
-		getchar();
-		LOG_DEBUG("디버그는 - %d %c\n", n, c);
-		getchar();
-		LOG_ERROR("에러는는 - %d %c\n", n, c);
-	}
+	LOG_INFO("INFO : 확인 필요");
+	//LOG_DEBUG("디버그는 %d번줄에서 수행", n);
+	//LOG_ERROR("여기에서 에러");
+
 }

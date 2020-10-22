@@ -15,3 +15,4 @@ public:
 	std::string GetPath() const;
 	int GetMaxSize() const;
 };
+
